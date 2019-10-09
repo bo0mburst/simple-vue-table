@@ -1,6 +1,6 @@
 {
   "name": "simple-vue-table",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A vue component that display tabular data",
   "license": "MIT",
   "keywords": [
