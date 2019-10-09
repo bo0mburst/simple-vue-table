@@ -1,5 +1,7 @@
 # simple-vue-table
-A vue component that display tabular data.
+A simple vue component that display tabular data.
+
+![image](https://user-images.githubusercontent.com/56244118/66449146-981c0080-ea86-11e9-9bb0-0497e2e06bcc.png)
 
 ## Installation
 ```
