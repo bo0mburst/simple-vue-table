@@ -4,13 +4,25 @@
             <thead>
                 <tr>
                     <th 
+                        class="checkbox-column"
+                        v-if="hasCheckbox"
+                    >
+                        <input 
+                            type="checkbox"
+                            @input="selectAll($event)"
+                        >
+                    </th>
+                    <th 
                         v-for="col in columns" 
                         :key="col.name"
                     >
-                        <slot name="column" :col="col">
+                        <slot 
+                            name="column" 
+                            :col="col"
+                        >
                             {{ col.text }}
                         </slot>
-                    </th>
+                    </th>                    
                 </tr>
             </thead>
             <tbody v-if="!loading">
@@ -20,10 +32,24 @@
                     @click="$emit('click', item)"
                 >
                     <td 
+                        class="checkbox-column"
+                        v-if="hasCheckbox"
+                    >
+                        <input 
+                            type="checkbox"
+                            @input="select($event, item)"
+                            :checked="selected.map(i=>i[columns[0].name]).indexOf(item[columns[0].name]) > -1"
+                        >
+                    </td>
+
+                    <td 
                         v-for="col in columns" 
                         :key="col.name"                 
                     >
-                        <slot name="row-data" :data="{value: item[col.name], property: col.name}">
+                        <slot 
+                            name="row-data" 
+                            :data="{value: item[col.name], property: col.name}"
+                        >
                             {{ item[col.name] }}
                         </slot>
                     </td>
@@ -63,6 +89,52 @@ export default {
         loading: {
             type: Boolean,
             default: false
+        },
+
+        hasCheckbox: {
+            type: Boolean,
+            default: false
+        },
+
+        selectedItems: {
+            type: Array,
+            default: () => []
+        }
+    },
+
+    watch: {
+        selectedItems (newVal) {
+            this.selected = newVal
+        }
+    },
+
+    data () {
+        return {
+            selected: []
+        }
+    },
+
+    methods: {
+        selectAll (e) {
+            if (e.target.checked) {
+                this.items.forEach(item => {
+                    this.selected.push(item)
+                });
+            } else {
+                this.selected = []
+            }
+
+            this.$emit('select', this.selected)
+        },
+
+        select (e, item) {
+            if (e.target.checked) {
+                this.selected.push(item)
+            } else {
+                this.selected.splice(this.selected.map(i => i[this.columns[0].name]).indexOf(item[this.columns[0].name]), 1)
+            }
+
+            this.$emit('select', this.selected)
         }
     }
 }
@@ -127,5 +199,16 @@ export default {
 
     tbody.table-loading > tr > td {
         text-align: center;
+    }
+
+    .checkbox-column {
+        text-align: center;
+        width: 1em;
+    }
+
+    input[type=checkbox] {
+        width: 1em;
+        height: 1em;
+        cursor: pointer;
     }
 </style>

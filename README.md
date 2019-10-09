@@ -12,7 +12,11 @@ npm install simple-vue-table
 ```html
 <template>
     <div id="app">
-        <simple-vue-table :items="items" :columns="columns"></simple-vue-table>
+        <simple-vue-table 
+          :items="items" 
+          :columns="columns"
+        >
+        </simple-vue-table>
     </div>
 </template>
 ```
@@ -39,8 +43,9 @@ export default {
         { id: 10, username: "Armand Barry", contact: "16170519 4759", email: "non.hendrerit@ipsum.edu" }
       ],
 
+      // the first column will be the unique identifier
       columns: [
-        { name: 'id', text: 'User ID' },
+        { name: 'id', text: 'User ID' }, 
         { name: 'username', text: 'Name' },
         { name: 'contact', text: 'Contact No.' },
         { name: 'email', text: 'Email Address' }
@@ -50,25 +55,40 @@ export default {
 }
 ```
 
-### Slots and Props
+### Slots
 Use this slots if you want to display links, images, or any custom display for your data.
-- column
-- row-data
-- loading
 
-Props:
-- items (array of objects)
-- columns (array of objects) with name and text property
-- loading - boolean
+| Slot name  | Slot prop  | 
+| ---------- | ---------- |
+| column     | col        |
+| row-data   | data       |
+| loading    |            |
+
+### Attributes
+
+| Prop          | Type              | Description                                                           |
+| ------------- | ----------------- | --------------------------------------------------------------------  |
+| items         | Array of Objects  | your actual data                                                      |
+| columns       | Array of Objects  | must include properties: name (item property) and text (column title) |
+| loading       | Boolean           | if true, loading will show                                            |
+| hasCheckbox   | Boolean           | if true, checkboxes will show                                         |
+| selectedItems | Array of Objects  | items that are checked                                                |
 
 ```html
 <template>
     <div id="app">
-        <simple-vue-table :items="items" :columns="columns" :loading="false">
+        <simple-vue-table 
+          :items="items" 
+          :columns="columns" 
+          :loading="loading"
+          :selectedItems="[{id: 1}]"
+          hasCheckbox
+        >
             <!-- column header  -->
              <template #column="{ col }">
                 <span>{{ col.text }}</span>
             </template>
+            
             <!-- rows -->
             <template #row-data="{ data }">
                 <a
@@ -82,6 +102,7 @@ Props:
                   {{ data.value }}
                 </span>
             </template>
+
             <template #loading>
                 <span>Now loading...</span>
             </template>
@@ -89,6 +110,11 @@ Props:
     </div>
 </template>
 ```
+
+### Events
+
+@click - emits when a row is clicked.
+@select - when selected/checked items is changed
 
 ### LICENSE
 MIT

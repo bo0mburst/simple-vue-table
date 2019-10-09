@@ -1,10 +1,17 @@
 <template>
     <div id="app">
-        <simple-vue-table :items="items" :columns="columns" :loading="loading">
+        <simple-vue-table 
+          :items="items" 
+          :columns="columns" 
+          :loading="loading"
+          :selectedItems="[{id: 1}]"
+          hasCheckbox
+        >
             <!-- column header  -->
              <template #column="{ col }">
                 <span>{{ col.text }}</span>
             </template>
+            
             <!-- rows -->
             <template #row-data="{ data }">
                 <a
@@ -18,6 +25,7 @@
                   {{ data.value }}
                 </span>
             </template>
+
             <template #loading>
                 <span>Now loading...</span>
             </template>
